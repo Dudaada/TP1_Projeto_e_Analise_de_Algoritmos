@@ -4,7 +4,7 @@
 
 void ConcertarNave(Mapa *mapa);
 int AndarnoMapa(Mapa *mapa);
-void UmMeteoroAcertou(Mapa *mapa);
+int UmMeteoroAcertou(Mapa *mapa);
 void RouboExtraterrestre(Mapa *mapa);
 
 #endif
