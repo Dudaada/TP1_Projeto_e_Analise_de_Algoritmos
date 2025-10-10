@@ -53,6 +53,8 @@ Mapa* lerArquivo(const char* nomeArquivo) {
         printf("Aviso: posição inicial 'X' não encontrada no mapa.\n");
     }
 
+    // inicializa o contador de pecas
+    m->qtdPecas = 0;
     return m;
 }
 

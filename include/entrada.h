@@ -10,6 +10,7 @@ typedef struct {
     char **mapa; //matriz dinâmica com o mapa
     int linhaInicial; //posição do 'X'
     int colunaInicial; //posição do 'X'
+    int qtdPecas;//guarda quantas pecas ja foram pegas
 } Mapa;
 
 Mapa* lerArquivo(const char* nomeArquivo);
