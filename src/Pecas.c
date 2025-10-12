@@ -53,7 +53,7 @@ void RouboExtraterrestre(Mapa *mapa){
 		printf("Com muito esforço a tripulacao derrotou a invasão!");
 	}
 	if(num == 2){
-		int pegou=0
+		int pegou=0;
 		if(mapa->qtdPecas == 1){
 			pegou=1;
 		}else{

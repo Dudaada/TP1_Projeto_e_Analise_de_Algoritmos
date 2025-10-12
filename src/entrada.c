@@ -28,7 +28,6 @@ Mapa* lerArquivo(const char* nomeArquivo) {
         m->mapa[i] = (char*) malloc((m->largura + 1) * sizeof(char)); // +1 pro '\0'
     }
 
-    //lê o mapa linha por linha
     for (int i = 0; i < m->altura; i++) {
         fscanf(arquivo, "%s", m->mapa[i]);
     }

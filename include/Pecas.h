@@ -1,5 +1,6 @@
 #ifndef PECAS_H
 #define PECAS_H
+#include "../include/entrada.h"
 
 
 void ConcertarNave(Mapa *mapa);
