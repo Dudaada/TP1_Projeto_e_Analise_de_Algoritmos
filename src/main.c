@@ -8,30 +8,49 @@ int main() {
 
     while (opcao != 0) {
         printf("\n====================================\n");
-        printf("     EXPRESSO INTERESTELAR - PAA\n");
+        printf("     EXPRESSO INTERESTELAR \n");
         printf("=====================================\n");
-        printf("Nome do arquivo de entrada (ex: testes/mapa1.txt) ou digite '0' para sair: ");
-        scanf("%s", nomeArquivo);
+        printf("[1] Executar programa com os arquivos ja criados da pasta 'testes'\n");
+        printf("[2] Gerar novo arquivo de teste\n");
+        printf("[0] Sair\n> ");
+        scanf("%d", &opcao);
 
-        if (nomeArquivo[0] == '0') {
+        if (opcao == 0) {
             printf("\nEncerrando o programa...\n");
             break;
         }
 
-        Mapa* m = lerArquivo(nomeArquivo);
-        if (m == NULL) {
-            printf("\n Erro: nao foi possivel ler o arquivo '%s'.\n", nomeArquivo);
-            printf("Verifique o caminho e tente novamente.\n");
-            continue; // volta para o início do loop
+        if (opcao == 2) {
+            gerarMapaAutomaticamente();
+            continue;
         }
 
-        imprimirMapa(m);
+        if (opcao == 1) {
+            printf("\nDigite o nome do arquivo de entrada (ex: testes/mapa1.txt): ");
+            scanf("%s", nomeArquivo);
 
-        liberarMapa(m);
+            if (nomeArquivo[0] == '0') {
+                printf("\nEncerrando o programa...\n");
+                break;
+            }
 
-        printf("\nDeseja carregar outro arquivo?\n");
-        printf("[1] Sim\n[0] Nao (sair)\n> ");
-        scanf("%d", &opcao);
+            Mapa* m = lerArquivo(nomeArquivo);
+            if (m == NULL) {
+                printf("\nErro: nao foi possivel ler o arquivo '%s'.\n", nomeArquivo);
+                printf("Verifique o caminho e tente novamente.\n");
+                continue; 
+            }
+
+            imprimirMapa(m);
+            liberarMapa(m);
+
+            printf("\nDeseja carregar outro arquivo?\n");
+            printf("[1] Sim\n[0] Nao (sair)\n> ");
+            scanf("%d", &opcao);
+        } 
+        else {
+            printf("\nOpcao invalida! Tente novamente.\n");
+        }
     }
 
     return 0;

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "../include/entrada.h"
 
 Mapa* lerArquivo(const char* nomeArquivo) {
@@ -106,4 +107,129 @@ void imprimirMapa(Mapa* m) {
         printf("\n");
     }
     printf("\n");
+}
+
+//função auxiliar para gerar caracteres do mapa com base na dificuldade
+char gerarCaractereCaminho(int dificuldade) {
+    int r = rand() % 100;
+    switch (dificuldade) {
+        case 1: // fácil
+            if (r < 60) return '-';
+            else if (r < 80) return '|';
+            else if (r < 90) return '+';
+            else return '.';
+        case 2: // médio
+            if (r < 40) return '-';
+            else if (r < 55) return '|';
+            else if (r < 65) return '+';
+            else return '.';
+        case 3: // difícil
+            if (r < 25) return '-';
+            else if (r < 35) return '|';
+            else if (r < 40) return '+';
+            else return '.';
+        default:
+            return '.';
+    }
+}
+
+//função principal de geração do mapa
+Mapa gerarMapaAutomaticamente() {
+    srand(time(NULL));
+
+    int D, Dperda, Againho;
+    int altura, largura, pecas, dificuldade;
+    char nomeArquivo[100];
+
+    printf("\n=== GERADOR DE MAPAS AUTOMATICOS ===\n\n");
+
+    printf("Durabilidade inicial (D): ");
+    scanf("%d", &D);
+
+    printf("Perda por movimento (D'): ");
+    scanf("%d", &Dperda);
+
+    printf("Ganho por peça (A): ");
+    scanf("%d", &Againho);
+
+    printf("Altura do mapa: ");
+    scanf("%d", &altura);
+
+    printf("Largura do mapa: ");
+    scanf("%d", &largura);
+
+    printf("Quantidade de peças (P): ");
+    scanf("%d", &pecas);
+
+    printf("Nivel de dificuldade (1 = facil, 2 = medio, 3 = dificil): ");
+    scanf("%d", &dificuldade);
+
+    printf("Nome do arquivo de saida (ex: testes/mapaN.txt, sendo N um número): ");
+    scanf("%s", nomeArquivo);
+
+    //aloca o mapa
+    char **mapa = malloc(altura * sizeof(char *));
+    for (int i = 0; i < altura; i++)
+        mapa[i] = malloc((largura + 1) * sizeof(char));
+
+    //gera o conteúdo
+    for (int i = 0; i < altura; i++) {
+        for (int j = 0; j < largura; j++) {
+            mapa[i][j] = gerarCaractereCaminho(dificuldade);
+        }
+        mapa[i][largura] = '\0';
+    }
+
+    //define início e destino
+    int xLinha = rand() % altura;
+    int xColuna = rand() % largura;
+    int fLinha, fColuna;
+    do {
+        fLinha = rand() % altura;
+        fColuna = rand() % largura;
+    } while (fLinha == xLinha && fColuna == xColuna);
+
+    mapa[xLinha][xColuna] = 'X';
+    mapa[fLinha][fColuna] = 'F';
+
+    //adiciona peças
+    for (int k = 0; k < pecas; k++) {
+        int pLinha, pColuna;
+        do {
+            pLinha = rand() % altura;
+            pColuna = rand() % largura;
+        } while (mapa[pLinha][pColuna] == 'X' || mapa[pLinha][pColuna] == 'F' || mapa[pLinha][pColuna] == 'P');
+        mapa[pLinha][pColuna] = 'P';
+    }
+
+    //salva o arquivo
+    FILE *arq = fopen(nomeArquivo, "w");
+    if (!arq) {
+        printf("\nErro ao criar o arquivo!\n");
+        Mapa m = {0};
+        return m; //retorna um mapa vazio em caso de erro
+    }
+
+    fprintf(arq, "%d %d %d\n", D, Dperda, Againho);
+    fprintf(arq, "%d %d\n", altura, largura);
+    for (int i = 0; i < altura; i++)
+        fprintf(arq, "%s\n", mapa[i]);
+    fclose(arq);
+
+    printf("\nArquivo '%s' gerado com sucesso!\n\n", nomeArquivo);
+
+    //cria a struct Mapa
+    Mapa m;
+    m.D = D;
+    m.Dperda = Dperda;
+    m.Againho = Againho;
+    m.altura = altura;
+    m.largura = largura;
+    m.mapa = mapa;
+    m.linhaInicial = xLinha;
+    m.colunaInicial = xColuna;
+
+    imprimirMapa(&m);
+
+    return m; 
 }

@@ -28,4 +28,7 @@ Mapa* lerArquivo(const char* nomeArquivo);
 void liberarMapa(Mapa* m);
 void imprimirMapa(Mapa* m);
 
+char gerarCaractereCaminho(int dificuldade);
+Mapa gerarMapaAutomaticamente();
+
 #endif
