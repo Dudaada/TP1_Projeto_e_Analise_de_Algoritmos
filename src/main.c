@@ -9,15 +9,7 @@ int main() {
     Mapa* m = lerArquivo(nomeArquivo);
     if (m == NULL) return 1;
 
-    printf("\nMapa lido com sucesso!\n");
-    printf("D = %d, D' = %d, A = %d\n", m->D, m->Dperda, m->Againho);
-    printf("Altura = %d, Largura = %d\n", m->altura, m->largura);
-    printf("Posicao inicial (X): linha %d, coluna %d\n\n", m->linhaInicial, m->colunaInicial);
-
-    // Mostra o mapa
-    for (int i = 0; i < m->altura; i++) {
-        printf("%s\n", m->mapa[i]);
-    }
+    imprimirMapa(m);
 
     liberarMapa(m);
     return 0;

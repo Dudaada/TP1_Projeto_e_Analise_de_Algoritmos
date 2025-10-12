@@ -66,3 +66,44 @@ void liberarMapa(Mapa* m) {
     free(m->mapa);
     free(m);
 }
+
+void imprimirMapa(Mapa* m) {
+    printf("\nMapa lido com sucesso!\n");
+    printf("D = %d, D' = %d, A = %d\n", m->D, m->Dperda, m->Againho);
+    printf("Altura = %d, Largura = %d\n", m->altura, m->largura);
+    printf("Posicao inicial (X): linha %d, coluna %d\n\n", m->linhaInicial, m->colunaInicial);
+
+    for (int i = 0; i < m->altura; i++) {
+        for (int j = 0; j < m->largura; j++) {
+            char c = m->mapa[i][j];
+            switch (c) {
+                case 'X':  
+                    printf(RED "X" RESET);
+                    break;
+                case 'F': 
+                    printf(GREEN "F" RESET);
+                    break;
+                case 'P':  
+                    printf(YELLOW "P" RESET);
+                    break;
+                case '-':  
+                    printf(CYAN "-" RESET);
+                    break;
+                case '|':  
+                    printf(CYAN "|" RESET);
+                    break;
+                case '+':  
+                    printf(MAGENTA "+" RESET);
+                    break;
+                case '.':  
+                    printf(GRAY "." RESET);
+                    break;
+                default:   
+                    printf(WHITE "%c" RESET, c);
+                    break;
+            }
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
