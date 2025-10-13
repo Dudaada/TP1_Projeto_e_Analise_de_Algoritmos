@@ -35,15 +35,27 @@ Mapa* lerArquivo(const char* nomeArquivo) {
 
     fclose(arquivo);
 
-    //localiza a posição inicial 'X'
+    //localiza a posição inicial 'X' e final 'Y'
     m->linhaInicial = -1;
     m->colunaInicial = -1;
 
-    for (int i = 0; i < m->altura; i++) {
+    m->linhaFinal=-1;
+    m->colunaFinal=-1;
+    
+    int fim=0;
+
+    for (int i = 0; i < m->altura && !fim; i++) {
         for (int j = 0; j < m->largura; j++) {
             if (m->mapa[i][j] == 'X') {
                 m->linhaInicial = i;
                 m->colunaInicial = j;
+            }
+            else if (m->mapa[i][j] == 'F') {
+                m->linhaFinal = i;
+                m->colunaFinal = j;
+            }
+            if (m->linhaInicial!=-1 && m->linhaFinal!=-1){
+                fim=1;
                 break;
             }
         }
@@ -73,6 +85,7 @@ void imprimirMapa(Mapa* m) {
     printf("D = %d, D' = %d, A = %d\n", m->D, m->Dperda, m->Againho);
     printf("Altura = %d, Largura = %d\n", m->altura, m->largura);
     printf("Posicao inicial (X): linha %d, coluna %d\n\n", m->linhaInicial, m->colunaInicial);
+    printf("Posicao final (F): linha %d, coluna %d\n\n", m->linhaFinal, m->colunaFinal);
 
     for (int i = 0; i < m->altura; i++) {
         for (int j = 0; j < m->largura; j++) {

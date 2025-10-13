@@ -22,6 +22,8 @@ typedef struct {
     int linhaInicial; //posição do 'X'
     int colunaInicial; //posição do 'X'
     int qtdPecas;//guarda quantas pecas ja foram pegas
+    int linhaFinal;
+    int colunaFinal;
 } Mapa;
 
 Mapa* lerArquivo(const char* nomeArquivo);

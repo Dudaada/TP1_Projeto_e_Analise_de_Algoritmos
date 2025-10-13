@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../include/entrada.h"
+#include "controleNave.c"
 
 int main() {
     char nomeArquivo[100];
@@ -40,8 +41,8 @@ int main() {
                 printf("Verifique o caminho e tente novamente.\n");
                 continue; 
             }
-
             imprimirMapa(m);
+            encontraCaminho(m);
             liberarMapa(m);
 
             printf("\nDeseja carregar outro arquivo?\n");
