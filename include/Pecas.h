@@ -6,6 +6,6 @@
 void ConcertarNave(Mapa *mapa);
 int AndarnoMapa(Mapa *mapa);
 int UmMeteoroAcertou(Mapa *mapa);
-void RouboExtraterrestre(Mapa *mapa);
+int RouboExtraterrestre(Mapa *mapa);
 
 #endif

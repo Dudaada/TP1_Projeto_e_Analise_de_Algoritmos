@@ -2,6 +2,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "../include/entrada.h"
+#include "../include/Pecas.h"
+#include "../include/controleNave.h"
 
 int verificaMovimento(char direcao, Mapa* mapa,int x,int y,int* novoX,int* novoY, int** visitado){
 
@@ -35,33 +37,73 @@ int verificaMovimento(char direcao, Mapa* mapa,int x,int y,int* novoX,int* novoY
 
     return 1;
 }
+int movimentarNave(Mapa* mapa, int** visitado, int** solucao, int x, int y) {
+    bool pecaColetada = false;
+    bool danoMeteoro = false;
+    int pecasRoubadas = 0;
 
-int movimentarNave(Mapa* mapa, int** visitado, int** solucao,int x, int y) {
+    char evento = mapa->mapa[x][y];
+
+    switch (evento) {
+    case 'P':
+        ConcertarNave(mapa);
+        pecaColetada = true;
+        mapa->mapa[x][y] = '+';
+        break;
+    case '#':
+        UmMeteoroAcertou(mapa);
+        danoMeteoro = true;
+        break;
+    case '&':
+        pecasRoubadas = RouboExtraterrestre(mapa);
+        break;
+    }
 
     printf("Linha: %d, Coluna: %d; D: %d, pecas restantes: %d\n",x,y,mapa->D,4-mapa->qtdPecas);
 
-    if (x == mapa->linhaFinal && y == mapa->colunaFinal) { //caso base, chegou ao destino
+    if (x == mapa->linhaFinal && y == mapa->colunaFinal) {
         solucao[x][y] = 1;
         return 1;
     }
 
-    visitado[x][y] = 1;
-    solucao[x][y] = 1;
+    if (mapa->D <= 0 && mapa->qtdPecas < 4) {
+        // Pula para o bloco de reversão no final da função
+    } else {
+        visitado[x][y] = 1;
+        solucao[x][y] = 1;
 
-    char direcoes[] = {'e','d','c','b'};
-    int novoX,novoY;
+        char direcoes[] = {'e', 'd', 'c', 'b'};
+        int novoX, novoY;
 
-    for (int i = 0; i < 4; i++) { //tenta movimentar a nave nas quatro direcoes
-        if (verificaMovimento(direcoes[i],mapa,x,y,&novoX,&novoY,visitado)){ //verifica se é possível andar para a direção i
-            if (movimentarNave(mapa, visitado, solucao, novoX, novoY)){ 
-                return 1; //se a partir daquela direcao foi possível chegar numa rota, encerra a recursão
+        for (int i = 0; i < 4; i++) {
+            if (verificaMovimento(direcoes[i], mapa, x, y, &novoX, &novoY, visitado)) {
+                AndarnoMapa(mapa);
+
+                if (movimentarNave(mapa, visitado, solucao, novoX, novoY)) {
+                    return 1;
+                }
+
+                if (mapa->qtdPecas < 4) {
+                    mapa->D += mapa->Dperda;
+                }
             }
         }
     }
-    // caso contrario, retorna para as posições anteriores, que irão tentar outras direções
-    printf("backtracking em (%d,%d)\n",x,y); 
+
+    if (pecaColetada) {
+        mapa->qtdPecas--;
+        mapa->D -= mapa->Againho;
+        mapa->mapa[x][y] = 'P';
+    }
+    if (danoMeteoro) {
+        mapa->D += mapa->Dperda;
+    }
+    if (pecasRoubadas > 0) {
+        mapa->qtdPecas += pecasRoubadas;
+    }
+    printf("backtracking em (%d,%d)\n",x,y);
     solucao[x][y] = 0;
-    visitado[x][y] = 0; //desmarca as visitas para que seja possível testar a posição posteriormente vindo de outras rotas 
+    visitado[x][y] = 0;
 
     return 0;
 }

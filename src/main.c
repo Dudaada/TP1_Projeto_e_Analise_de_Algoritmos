@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../include/entrada.h"
-#include "controleNave.c"
-
+#include "../include/Pecas.h"
+#include "../include/controleNave.h"
 int main() {
     char nomeArquivo[100];
     int opcao = 1;
@@ -27,7 +27,7 @@ int main() {
         }
 
         if (opcao == 1) {
-            printf("\nDigite o nome do arquivo de entrada (ex: testes/mapa1.txt): ");
+            printf("\nDigite o nome do arquivo de entrada (ex: ../testes/mapa1.txt): ");
             scanf("%s", nomeArquivo);
 
             if (nomeArquivo[0] == '0') {

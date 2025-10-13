@@ -46,21 +46,26 @@ int UmMeteoroAcertou(Mapa *mapa){
             return 0;
         }
 }
+//função chamada quando encontra no mapa &
+int RouboExtraterrestre(Mapa *mapa) {
+    if (mapa->qtdPecas == 0) {
+        printf("Invasão alienígena, mas não havia peças para roubar!\n");
+        return 0;
+    }
 
-void RouboExtraterrestre(Mapa *mapa){
-	int num = (rand() % 2) + 1;//1=nao roubou 2=roubou
-	if(num == 1){
-		printf("Com muito esforço a tripulacao derrotou a invasão!");
-	}
-	if(num == 2){
-		int pegou=0;
-		if(mapa->qtdPecas == 1){
-			pegou=1;
-		}else{
-			pegou=(rand() % mapa->qtdPecas) + 1;
-		}
-		mapa->qtdPecas-=pegou;
-		printf("Os alienigenas roubaram = %d\n", pegou);
-	}
-
+    int num = (rand() % 2) + 1;
+    if (num == 1) {
+        printf("Com muito esforço a tripulacao derrotou a invasão!\n");
+        return 0;
+    } else {
+        int pegou = 0;
+        if (mapa->qtdPecas == 1) {
+            pegou = 1;
+        } else {
+            pegou = (rand() % mapa->qtdPecas) + 1;
+        }
+        mapa->qtdPecas -= pegou;
+        printf("Os alienigenas roubaram = %d peça(s)!\n", pegou);
+        return pegou;
+    }
 }
