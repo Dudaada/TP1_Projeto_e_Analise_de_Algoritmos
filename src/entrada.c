@@ -162,7 +162,7 @@ Mapa gerarMapaAutomaticamente() {
     printf("Perda por movimento (D'): ");
     scanf("%d", &Dperda);
 
-    printf("Ganho por peça (A): ");
+    printf("Ganho por peca (A): ");
     scanf("%d", &Againho);
 
     printf("Altura do mapa: ");
@@ -171,21 +171,21 @@ Mapa gerarMapaAutomaticamente() {
     printf("Largura do mapa: ");
     scanf("%d", &largura);
 
-    printf("Quantidade de peças (P): ");
+    printf("Quantidade de pecas (P): ");
     scanf("%d", &pecas);
 
     printf("Nivel de dificuldade (1 = facil, 2 = medio, 3 = dificil): ");
     scanf("%d", &dificuldade);
 
-    printf("Nome do arquivo de saida (ex: testes/mapaN.txt, sendo N um número): ");
+    printf("Nome do arquivo de saida (ex: testes/mapaN.txt, sendo N um numero): ");
     scanf("%s", nomeArquivo);
 
-    //aloca o mapa
+    // aloca o mapa
     char **mapa = malloc(altura * sizeof(char *));
     for (int i = 0; i < altura; i++)
         mapa[i] = malloc((largura + 1) * sizeof(char));
 
-    //gera o conteúdo
+    // gera o conteúdo
     for (int i = 0; i < altura; i++) {
         for (int j = 0; j < largura; j++) {
             mapa[i][j] = gerarCaractereCaminho(dificuldade);
@@ -193,7 +193,7 @@ Mapa gerarMapaAutomaticamente() {
         mapa[i][largura] = '\0';
     }
 
-    //define início e destino
+    // define início e destino
     int xLinha = rand() % altura;
     int xColuna = rand() % largura;
     int fLinha, fColuna;
@@ -205,7 +205,7 @@ Mapa gerarMapaAutomaticamente() {
     mapa[xLinha][xColuna] = 'X';
     mapa[fLinha][fColuna] = 'F';
 
-    //adiciona peças
+    // adiciona peças
     for (int k = 0; k < pecas; k++) {
         int pLinha, pColuna;
         do {
@@ -215,12 +215,35 @@ Mapa gerarMapaAutomaticamente() {
         mapa[pLinha][pColuna] = 'P';
     }
 
+    //ADIÇÃO DOS DESAFIOS
+    int chanceMeteoro = rand() % 2; // 50% de chance
+    int chanceRoubo = rand() % 2;   // 50% de chance
+
+    if (chanceMeteoro) {
+        int mLinha, mColuna;
+        do {
+            mLinha = rand() % altura;
+            mColuna = rand() % largura;
+        } while (mapa[mLinha][mColuna] == 'X' || mapa[mLinha][mColuna] == 'F' || mapa[mLinha][mColuna] == 'P');
+        mapa[mLinha][mColuna] = '#';
+    }
+
+    if (chanceRoubo) {
+        int rLinha, rColuna;
+        do {
+            rLinha = rand() % altura;
+            rColuna = rand() % largura;
+        } while (mapa[rLinha][rColuna] == 'X' || mapa[rLinha][rColuna] == 'F' || mapa[rLinha][rColuna] == 'P' || mapa[rLinha][rColuna] == '#');
+        mapa[rLinha][rColuna] = '&';
+    }
+    //FIM DOS DESAFIOS
+
     //salva o arquivo
     FILE *arq = fopen(nomeArquivo, "w");
     if (!arq) {
         printf("\nErro ao criar o arquivo!\n");
         Mapa m = {0};
-        return m; //retorna um mapa vazio em caso de erro
+        return m;
     }
 
     fprintf(arq, "%d %d %d\n", D, Dperda, Againho);
@@ -244,5 +267,5 @@ Mapa gerarMapaAutomaticamente() {
 
     imprimirMapa(&m);
 
-    return m; 
+    return m;
 }

@@ -3,6 +3,7 @@
 #include "../include/entrada.h"
 #include "../include/Pecas.h"
 #include "../include/controleNave.h"
+
 int main() {
     char nomeArquivo[100];
     int opcao = 1;
@@ -22,7 +23,17 @@ int main() {
         }
 
         if (opcao == 2) {
-            gerarMapaAutomaticamente();
+            Mapa m = gerarMapaAutomaticamente();
+
+            Mapa* novoMapa = &m;
+
+            imprimirMapa(novoMapa);
+            encontraCaminho(novoMapa);
+            liberarMapa(novoMapa);
+
+            printf("\nDeseja gerar outro mapa?\n");
+            printf("[1] Sim\n[0] Nao (sair)\n> ");
+            scanf("%d", &opcao);
             continue;
         }
 
@@ -39,8 +50,9 @@ int main() {
             if (m == NULL) {
                 printf("\nErro: nao foi possivel ler o arquivo '%s'.\n", nomeArquivo);
                 printf("Verifique o caminho e tente novamente.\n");
-                continue; 
+                continue;
             }
+
             imprimirMapa(m);
             encontraCaminho(m);
             liberarMapa(m);
