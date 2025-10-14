@@ -22,6 +22,7 @@ void ConcertarNave(Mapa *mapa){
 int AndarnoMapa(Mapa *mapa){
     if(mapa->qtdPecas == 4){
         printf("Nave concertada não gastamos mais durabilidade.\n");//tira talvez
+		return 1;
     }
     else{
         if(mapa->D != 0){

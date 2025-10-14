@@ -27,7 +27,7 @@ int main() {
         }
 
         if (opcao == 1) {
-            printf("\nDigite o nome do arquivo de entrada (ex: ../testes/mapa1.txt): ");
+            printf("\nDigite o nome do arquivo de entrada (ex: testes/mapa1.txt): ");
             scanf("%s", nomeArquivo);
 
             if (nomeArquivo[0] == '0') {
