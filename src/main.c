@@ -47,7 +47,7 @@ int main() {
         switch (opcao) {
             case 1: // Carrega mapa
                 printf("\n--- Carregar Mapa ---\n");
-                printf("Digite o nome do arquivo de entrada (ex: mapa1.txt): ");
+                printf("Digite o nome do arquivo de entrada (ex: testes/mapa1.txt): ");
                 scanf("%s", nomeArquivoCarregado);
 
                 // Se já existir um mapa na memória, libera antes de carregar um novo
