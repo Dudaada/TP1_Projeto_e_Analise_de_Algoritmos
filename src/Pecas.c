@@ -19,7 +19,7 @@ void ConcertarNave(Mapa *mapa){
 //função que subtrai em D toda vez que a Nave anda um setor
 int AndarnoMapa(Mapa *mapa){
     if(mapa->qtdPecas == 4){
-        printf("Nave concertada nao gastamos mais durabilidade.\n");//tira talvez
+        //printf("Nave concertada nao gastamos mais durabilidade.\n");//teste
 		return 1;
     }
     else{
