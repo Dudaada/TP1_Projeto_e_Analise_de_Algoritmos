@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h> 
 
-#include "entrada.h"
-#include "controleNave.h"
-#include "Pecas.h"
+#include "../include/entrada.h"
+#include "../include/controleNave.h"
+#include "../include/Pecas.h"
 
 // Variável global que controla o modo analise
 int g_modo_analise = 0; // 0 = desligado, 1 = ligado

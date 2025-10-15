@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 #include "../include/entrada.h"
 #include "../include/Pecas.h"
 #include "../include/controleNave.h"
@@ -44,6 +45,30 @@ int verificaMovimento(char direcao, Mapa* mapa,int x,int y,int* novoX,int* novoY
 
     return 1;
 }
+
+void defineDirecoes(char c, char *vetor, int* possibilidades) {
+
+    char encruzilhada[] = {'e', 'd', 'c', 'b'};
+    char horizontal[]   = {'e', 'd'};
+    char vertical[]     = {'c', 'b'};
+
+    switch (c) {
+        case '-':
+            strcpy(vetor, horizontal);
+            (*possibilidades)=2;
+            break;
+        case '|':
+            strcpy(vetor, vertical);
+            (*possibilidades)=2;
+            break;
+        default:
+            strcpy(vetor, encruzilhada);
+            (*possibilidades)=4;
+            break;
+    }
+}
+
+
 int movimentarNave(Mapa* mapa, int** visitado, int** solucao, int x, int y) {
 
     //logica do modo analise
@@ -54,7 +79,6 @@ int movimentarNave(Mapa* mapa, int** visitado, int** solucao, int x, int y) {
             g_profundidade_maxima = g_profundidade_atual; // Atualiza o máximo
         }
     }
-
 
     bool pecaColetada = false;
     bool danoMeteoro = false;
@@ -99,10 +123,14 @@ int movimentarNave(Mapa* mapa, int** visitado, int** solucao, int x, int y) {
         visitado[x][y] = 1;
         solucao[x][y] = 1;
 
-        char direcoes[] = {'e', 'd', 'c', 'b'};
+        char direcoes[5];
+        int possibilidades=0;
         int novoX, novoY;
 
-        for (int i = 0; i < 4; i++) {
+        defineDirecoes(mapa->mapa[x][y], direcoes, &possibilidades);
+
+        for (int i = 0; i < possibilidades; i++) {
+
             if (verificaMovimento(direcoes[i], mapa, x, y, &novoX, &novoY, visitado)) {
                 AndarnoMapa(mapa);
 
