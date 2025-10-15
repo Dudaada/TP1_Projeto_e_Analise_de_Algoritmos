@@ -1,0 +1,21 @@
+25 4 4
+4 5
+//rota certa
+.....
+.--X.
+.|.|-
+.+P_F
+//sem rota certa com duas erradas
+/*
+.....
+.--X.
+...|-
+.+P_F
+*/
+//com apenas uma rota errada
+/*
+.....
+.--X.
+...|.
+.+P_F
+*/
