@@ -4,6 +4,9 @@
 #include <time.h>
 #include "../include/entrada.h"
 
+extern int g_modo_exibicao;
+
+
 Mapa* lerArquivo(const char* nomeArquivo) {
     FILE* arquivo = fopen(nomeArquivo, "r");
     if (!arquivo) {
@@ -180,6 +183,13 @@ Mapa gerarMapaAutomaticamente() {
     printf("Nome do arquivo de saida (ex: testes/mapaN.txt, sendo N um numero): ");
     scanf("%s", nomeArquivo);
 
+    // validações básicas
+     if (altura * largura < 2) {
+        printf("\nERRO: O mapa e muito pequeno! A altura x largura deve ser no minimo 2.\n");
+        Mapa mapa_vazio = {0}; 
+        return mapa_vazio;
+    }
+
     // aloca o mapa
     char **mapa = malloc(altura * sizeof(char *));
     for (int i = 0; i < altura; i++)
@@ -264,6 +274,10 @@ Mapa gerarMapaAutomaticamente() {
     m.mapa = mapa;
     m.linhaInicial = xLinha;
     m.colunaInicial = xColuna;
+
+    // corrigindo coordenadas
+    m.linhaFinal = fLinha;
+    m.colunaFinal = fColuna;
 
     imprimirMapa(&m);
 

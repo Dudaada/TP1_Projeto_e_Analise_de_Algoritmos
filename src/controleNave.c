@@ -5,6 +5,13 @@
 #include "../include/Pecas.h"
 #include "../include/controleNave.h"
 
+extern int g_modo_exibicao;
+extern int g_modo_analise;
+extern long int g_chamadas_recursivas;
+extern int g_profundidade_maxima;
+extern int g_profundidade_atual;
+
+
 int verificaMovimento(char direcao, Mapa* mapa,int x,int y,int* novoX,int* novoY, int** visitado){
 
     *novoX=x;
@@ -38,6 +45,17 @@ int verificaMovimento(char direcao, Mapa* mapa,int x,int y,int* novoX,int* novoY
     return 1;
 }
 int movimentarNave(Mapa* mapa, int** visitado, int** solucao, int x, int y) {
+
+    //logica do modo analise
+    if (g_modo_analise == 1) {
+        g_chamadas_recursivas++; // Contabiliza a chamada
+        g_profundidade_atual++; // Aumenta um nível de profundidade
+        if (g_profundidade_atual > g_profundidade_maxima) {
+            g_profundidade_maxima = g_profundidade_atual; // Atualiza o máximo
+        }
+    }
+
+
     bool pecaColetada = false;
     bool danoMeteoro = false;
     int pecasRoubadas = 0;
@@ -59,10 +77,19 @@ int movimentarNave(Mapa* mapa, int** visitado, int** solucao, int x, int y) {
         break;
     }
 
-    printf("Linha: %d, Coluna: %d; D: %d, pecas restantes: %d\n",x,y,mapa->D,4-mapa->qtdPecas);
+    if (g_modo_exibicao == 1 || g_modo_exibicao == 2) {
+        printf("Linha: %d, Coluna: %d; D: %d, pecas restantes: %d\n", x, y, mapa->D, 4 - mapa->qtdPecas);
+    }
 
     if (x == mapa->linhaFinal && y == mapa->colunaFinal) {
         solucao[x][y] = 1;
+        return 1;
+    }
+
+    if (x == mapa->linhaFinal && y == mapa->colunaFinal) {
+        solucao[x][y] = 1;
+        // contagem
+        if (g_modo_analise == 1) g_profundidade_atual--; // Diminui um nível ao sair
         return 1;
     }
 
@@ -80,6 +107,7 @@ int movimentarNave(Mapa* mapa, int** visitado, int** solucao, int x, int y) {
                 AndarnoMapa(mapa);
 
                 if (movimentarNave(mapa, visitado, solucao, novoX, novoY)) {
+                    if (g_modo_analise == 1) g_profundidade_atual--; // Diminui um nível ao sair
                     return 1;
                 }
 
@@ -101,9 +129,15 @@ int movimentarNave(Mapa* mapa, int** visitado, int** solucao, int x, int y) {
     if (pecasRoubadas > 0) {
         mapa->qtdPecas += pecasRoubadas;
     }
-    printf("backtracking em (%d,%d)\n",x,y);
+
+    if (g_modo_exibicao == 1) {
+        printf("...backtracking em (%d,%d)\n", x, y);
+    }
+
     solucao[x][y] = 0;
     visitado[x][y] = 0;
+
+    if (g_modo_analise == 1) g_profundidade_atual--; // Diminui um nível ao sair
 
     return 0;
 }
@@ -134,10 +168,12 @@ int encontraCaminho(Mapa* mapa) {
     } // alocação de matrizes auxiliares
 
     int rotaEncontrada = movimentarNave(mapa, visitado, solucao, mapa->linhaInicial, mapa->colunaInicial); //chamada do backtracking
-    if (rotaEncontrada) {
-        exibeCaminho(mapa, solucao);
 
-    } else {
+    if (rotaEncontrada && (g_modo_exibicao == 1 || g_modo_exibicao == 3)) {
+        exibeCaminho(mapa, solucao);
+    }
+
+    else {
         printf("nenhum caminho encontrado");
     }
 
