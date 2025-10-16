@@ -5,6 +5,7 @@
 #include "../include/entrada.h"
 #include "../include/Pecas.h"
 #include "../include/controleNave.h"
+#include "../include/rota.h"
 
 extern int g_modo_exibicao;
 extern int g_modo_analise;
@@ -69,7 +70,7 @@ void defineDirecoes(char c, char *vetor, int* possibilidades) {
 }
 
 
-int movimentarNave(Mapa* mapa, int** visitado, int** solucao, int x, int y) {
+int movimentarNave(Mapa* mapa, int** visitado, int** solucao, int x, int y,RotaFinal* rota) {
 
     //logica do modo analise
     if (g_modo_analise == 1) {
@@ -101,18 +102,16 @@ int movimentarNave(Mapa* mapa, int** visitado, int** solucao, int x, int y) {
         break;
     }
 
-    if (g_modo_exibicao == 1 || g_modo_exibicao == 2) {
+    int dAtual = mapa->D;
+    int pRestanteAtual = 4 - mapa->qtdPecas;
+
+    if (g_modo_exibicao == 1) {
         printf("Linha: %d, Coluna: %d; D: %d, pecas restantes: %d\n", x, y, mapa->D, 4 - mapa->qtdPecas);
     }
 
     if (x == mapa->linhaFinal && y == mapa->colunaFinal) {
         solucao[x][y] = 1;
-        return 1;
-    }
-
-    if (x == mapa->linhaFinal && y == mapa->colunaFinal) {
-        solucao[x][y] = 1;
-        // contagem
+        registraPosicao(rota,x,y,mapa->D,4-mapa->qtdPecas);
         if (g_modo_analise == 1) g_profundidade_atual--; // Diminui um nível ao sair
         return 1;
     }
@@ -134,8 +133,9 @@ int movimentarNave(Mapa* mapa, int** visitado, int** solucao, int x, int y) {
             if (verificaMovimento(direcoes[i], mapa, x, y, &novoX, &novoY, visitado)) {
                 AndarnoMapa(mapa);
 
-                if (movimentarNave(mapa, visitado, solucao, novoX, novoY)) {
+                if (movimentarNave(mapa, visitado, solucao, novoX, novoY,rota)) {
                     if (g_modo_analise == 1) g_profundidade_atual--; // Diminui um nível ao sair
+                    registraPosicao(rota,x,y,dAtual,pRestanteAtual);
                     return 1;
                 }
 
@@ -175,7 +175,7 @@ void exibeCaminho(Mapa* mapa, int** solucao) {  //mostra a rota encontrada no ma
     for (int i = 0; i < mapa->altura; i++) {
         for (int j = 0; j < mapa->largura; j++) {
             if (solucao[i][j] == 1)
-                printf("@ ");
+                printf(RED "%c " RESET, mapa->mapa[i][j]);
             else
                 printf("%c ", mapa->mapa[i][j]);
         }
@@ -195,10 +195,17 @@ int encontraCaminho(Mapa* mapa) {
         solucao[i] = calloc(M, sizeof(int));
     } // alocação de matrizes auxiliares
 
-    int rotaEncontrada = movimentarNave(mapa, visitado, solucao, mapa->linhaInicial, mapa->colunaInicial); //chamada do backtracking
+    RotaFinal* rota = inicializaRotaFinal();
 
-    if (rotaEncontrada && (g_modo_exibicao == 1 || g_modo_exibicao == 3)) {
-        exibeCaminho(mapa, solucao);
+    int rotaEncontrada = movimentarNave(mapa, visitado, solucao, mapa->linhaInicial, mapa->colunaInicial, rota); //chamada do backtracking
+
+    if (g_modo_exibicao == 2) {
+        if (rotaEncontrada){
+            imprimeRota(rota);
+            exibeCaminho(mapa, solucao); 
+        }else{
+            printf("Nao foi possivel encontrar uma rota\n");
+        }
     }
 
     for (int i = 0; i < N; i++) {
@@ -207,6 +214,7 @@ int encontraCaminho(Mapa* mapa) {
     }
     free(visitado);
     free(solucao);
+    liberaRota(rota);
 
     return rotaEncontrada;
 }

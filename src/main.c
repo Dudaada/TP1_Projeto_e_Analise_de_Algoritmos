@@ -74,9 +74,10 @@ int main() {
                 } else {
                     printf("\n--- Iniciar Jornada em '%s' ---\n", nomeArquivoCarregado);
                     printf("Escolha como deseja ver o resultado:\n");
-                    printf("[1] Relatorio Detalhado\n[2] Relatorio com apenas casos de sucessos\n[3] Apenas o Mapa Final\n");
+                    printf("[1] Analise detalhada do percurso\n[2] Rota final encontrada \n");
                     printf("Escolha uma opcao de exibicao: ");
                     scanf("%d", &g_modo_exibicao);
+                    printf("\n");
 
                     // ZERA OS CONTADORES ANTES DE CADA EXECUÇÃO
                     if (g_modo_analise == 1) {
