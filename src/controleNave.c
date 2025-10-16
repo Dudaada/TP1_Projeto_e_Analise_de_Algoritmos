@@ -48,9 +48,9 @@ int verificaMovimento(char direcao, Mapa* mapa,int x,int y,int* novoX,int* novoY
 
 void defineDirecoes(char c, char *vetor, int* possibilidades) {
 
-    char encruzilhada[] = {'e', 'd', 'c', 'b'};
-    char horizontal[]   = {'e', 'd'};
-    char vertical[]     = {'c', 'b'};
+    char encruzilhada[] = {'e', 'd', 'c', 'b', '\0'};
+    char horizontal[]   = {'e', 'd', '\0'};
+    char vertical[]     = {'c', 'b', '\0'};
 
     switch (c) {
         case '-':
@@ -199,10 +199,6 @@ int encontraCaminho(Mapa* mapa) {
 
     if (rotaEncontrada && (g_modo_exibicao == 1 || g_modo_exibicao == 3)) {
         exibeCaminho(mapa, solucao);
-    }
-
-    else {
-        printf("nenhum caminho encontrado");
     }
 
     for (int i = 0; i < N; i++) {
