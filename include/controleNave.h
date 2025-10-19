@@ -9,5 +9,6 @@ int verificaMovimento(char direcao, Mapa* mapa,int x,int y,int* novoX,int* novoY
 int movimentarNave(Mapa* mapa, int** visitado, int** solucao,int x,int y,RotaFinal* rota);
 void exibeCaminho(Mapa* mapa, int** solucao);
 int encontraCaminho(Mapa* mapa);
+void defineDirecoes(char c, char *vetor, int* possibilidades);
 
 #endif

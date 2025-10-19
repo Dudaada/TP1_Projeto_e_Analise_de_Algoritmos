@@ -91,7 +91,6 @@ int movimentarNave(Mapa* mapa, int** visitado, int** solucao, int x, int y,RotaF
     case 'P':
         ConcertarNave(mapa);
         pecaColetada = true;
-        mapa->mapa[x][y] = '+';
         break;
     case '#':
         UmMeteoroAcertou(mapa);
